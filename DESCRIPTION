@@ -1,0 +1,12 @@
+Package: SpcvxBic
+Title: Sparse Convex Biclustering
+Version: 1.0.1
+Author: Chenliang Gu <gcl0723@163.com>
+Maintainer: Chenliang Gu <gcl0723@163.com>
+Description: Identifies a bicluster of a data matrix, clustering observations and features simultaneously, and apply sparsity to features. 'SpcvxBic' can be used for high-dimensional data, identifies uninformative features. The method is based on Bi-ADMM algorithm. For a detailed introduction to this algorithm, please refer to the author's related papers.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports: 
+    cvxclustr,reticulate,Matrix,igraph,caret,stats,mclust,MASS
