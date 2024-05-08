@@ -11,6 +11,7 @@ Here we show the example code of simulation, compared with biADMM algorithm
 
 #05/08/2024 at Beijing Normal University Zhuhai Campus
 
+```
 pac <- c("survival","plyr","ggplot2","reshape2","phyloseq",'dirmult',"microbiome","vegan","e1071","caret","pROC",
          "fossil","cvxclustr","cvxbiclustr","doParallel","foreach","mclust","Matrix","MASS","reticulate")
          
@@ -406,3 +407,4 @@ MSD(best.scb.admm.adj.rand)
 
 MSD(best.val.bi.admm.adj.rand)
 MSD(best.val.scb.admm.adj.rand)
+```
