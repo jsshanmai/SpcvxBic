@@ -4,7 +4,7 @@
 \alias{cluster.label}
 \title{generate cluster label for cluster using row or col names}
 \usage{
-\method{cluster}{label}(X, labels = "col")
+cluster.label(X, labels = "col")
 }
 \arguments{
 \item{X}{The data matrix to be clustered}

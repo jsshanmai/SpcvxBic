@@ -22,7 +22,7 @@
 #' X = data_gen(n = 100, true_p=40, p = 80)
 
 data_gen <- function(seed.cluster = 123, seed.data = 654, n, true_p, p, mu.lower=-10, mu.upper=10, theta = 2, theta_noise=0.1, row_group = 4, col_group = 4){
-
+  requireNamespace("mclust")
   mu <- seq(mu.lower,mu.upper,0.2)
   x <- matrix(0, n, p)
 

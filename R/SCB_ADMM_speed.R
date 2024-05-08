@@ -1,6 +1,6 @@
 #' @title faster version of Sparse Convex Biclustering Algorithm
 #'
-#' @description Same algorithm as \code{sparse.biADMM}. Call python code to speed up the running time.
+#' @description Same algorithm as \code{sparse.biADMM}. Call python code to speed up the running time. Note that please get the py file in 'inst' fold.
 #' @param X The data matrix to be clustered. The rows are the samples, and the columns are the features.
 #' @param nu1 A turning parameter for the augmented term for fusing-row  shrinkage
 #' @param nu2 A turning parameter for the augmented term for fusing-column  shrinkage
@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # generate dataset
 #' set.seed(123)
 #' X = data_gen(n = 100, true_p=40, p = 80)
@@ -27,15 +28,20 @@
 #' m = 5
 #' phi = 0.5
 #' # sparse.biADMM algorithm
-#' res2 = sparse.biADMM.speed(X, nu1, nu2, nu3, gamma_1, gamma_2, gamma_3, feature_weight = rep(1,ncol(X)),m, phi, niter = 10, tol = 0.0001, output = 0)
+#' res2 = sparse.biADMM.speed(X,
+#' nu1, nu2, nu3, gamma_1, gamma_2, gamma_3,
+#' feature_weight = rep(1,ncol(X)),
+#' m, phi, niter = 10, tol = 0.0001, output = 0)
 #' dim(res2$A)
+#' }
 
 sparse.biADMM.speed = function(X, nu1, nu2, nu3,
                                gamma_1, gamma_2, gamma_3,
                                feature_weight = rep(1,ncol(X)),
                                m = 5, phi=0.5,niter = 1000,tol = 0.1,output = 1){
 
-  require(cvxclustr)
+  requireNamespace("cvxclustr")
+  requireNamespace("reticulate")
 
 
   path <- paste("./R", "SBC_ADMM_python.py", sep="/")

@@ -17,7 +17,8 @@
 
 feature.selection.diagnostic <- function(X, A,tol = 1e-6)
 {
-  require(caret)
+  requireNamespace("caret")#require(caret)
+  requireNamespace("stats")
   true.feature <- colnames(X) != "noisy" # select not noisy feature
   # use L2 norm for column estimates to decide whether it is a noisy variable
   estimated.feature <- apply(A, 2, sd) > tol
@@ -30,7 +31,8 @@ feature.selection.diagnostic <- function(X, A,tol = 1e-6)
 
 # define a new function diag sensetivity and specificity, when true_p/p is known
 feature.selection.diagnostic.quatile<-function(X, A,p,true_p,method =sd){
-  require(caret)
+  requireNamespace("caret")#require(caret)
+  requireNamespace("stats")
   true.feature <- colnames(X) != "noisy" # select not noisy feature
   tol = quantile(apply(A, 2, method),1-true_p/p) # use the label ratio
   estimated.feature <- apply(A, 2, method) > tol

@@ -51,9 +51,10 @@ sparse.biADMM.speed(
 A list of results, containing matrix of A, v, z, lambda1, and lambda2
 }
 \description{
-Same algorithm as \code{sparse.biADMM}. Call python code to speed up the running time.
+Same algorithm as \code{sparse.biADMM}. Call python code to speed up the running time. Note that please get the py file in 'inst' fold.
 }
 \examples{
+\donttest{
 # generate dataset
 set.seed(123)
 X = data_gen(n = 100, true_p=40, p = 80)
@@ -62,6 +63,10 @@ nu1 = nu2 = nu3 = gamma_1 = gamma_2 = gamma_3 = 0.1
 m = 5
 phi = 0.5
 # sparse.biADMM algorithm
-res2 = sparse.biADMM.speed(X, nu1, nu2, nu3, gamma_1, gamma_2, gamma_3, feature_weight = rep(1,ncol(X)),m, phi, niter = 10, tol = 0.0001, output = 0)
+res2 = sparse.biADMM.speed(X,
+nu1, nu2, nu3, gamma_1, gamma_2, gamma_3,
+feature_weight = rep(1,ncol(X)),
+m, phi, niter = 10, tol = 0.0001, output = 0)
 dim(res2$A)
+}
 }

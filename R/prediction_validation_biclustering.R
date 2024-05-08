@@ -6,8 +6,8 @@
 #' @param clusters_col cluster assignment for each feature
 #' @param data_validate validate dataset
 #'
-predict_bi_validate <- function(X,clusters_row,clusters_col, X_validate,label_valdiate=Null,label.known=1){
-
+predict_bi_validate <- function(X,clusters_row,clusters_col, X_validate,label_valdiate=NULL,label.known=1){
+  requireNamespace("mclust")
   size.row <- table(clusters_row)
   size.col <- table(clusters_col)
   n.cluster.row <- length(size.row) #类个数

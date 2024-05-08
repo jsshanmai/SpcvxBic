@@ -50,7 +50,7 @@ Same algorithm as \code{biADMM}. Call python code to speed up the running time.
 \examples{
 # generate dataset
 set.seed(123)
-X = data_gen(n = 100, p = 80)
+X = data_gen(n = 100, p = 80,true_p=0)
 # set parameters
 nu1 = nu2 = gamma_1 = gamma_2 = 0.1
 m = 5

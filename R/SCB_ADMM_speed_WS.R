@@ -25,6 +25,8 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' #Note that please get the py file in 'inst' fold.
 #' # generate dataset
 #' set.seed(123)
 #' X = data_gen(n = 100, p = 80 , true_p = 40)
@@ -33,24 +35,32 @@
 #' m = 5
 #' phi = 0.5
 #' # Without fill A,v,g,z
-#' res1 = sparse.biADMM.speed.WS(X, A= NULL, nu1, nu2, nu3,v=NULL ,z=NULL ,g=NULL ,gamma_1, gamma_2, gamma_3,
-#'                              feature_weight = rep(1,ncol(X)), m , phi,niter = 2000,tol = 1e-6,output = 0)
+#' res1 = sparse.biADMM.speed.WS(X, A= NULL,
+#' nu1, nu2, nu3,v=NULL ,z=NULL ,g=NULL ,
+#' gamma_1, gamma_2, gamma_3,
+#' feature_weight = rep(1,ncol(X)),
+#' m , phi,niter = 2000,tol = 1e-6,output = 0)
 #' # change some parameters, use previous results as initial values
 #' gamma_1 = gamma_2 = 0.5
-#' res2 = sparse.biADMM.speed.WS(X, A= res1$A, nu1, nu2, nu3,v=res1$v ,z=res1$z ,g=res1$g ,gamma_1, gamma_2, gamma_3,
-#'                              feature_weight = rep(1,ncol(X)), m , phi,niter = 2000,tol = 1e-6,output = 0)
+#' res2 = sparse.biADMM.speed.WS(X,
+#' A= res1$A, nu1, nu2, nu3,v=res1$v ,
+#' z=res1$z ,g=res1$g ,
+#' gamma_1, gamma_2, gamma_3,
+#' feature_weight = rep(1,ncol(X)),
+#' m , phi,niter = 2000,tol = 1e-6,output = 0)
 #' #A rough comparison of computational efficiency
 #' print (res1$iters)
 #' print (res2$iters)
 #' dim(res2$A)
+#' }
 
 sparse.biADMM.speed.WS = function(X, A= NULL, nu1, nu2, nu3,v=NULL ,z=NULL ,g=NULL ,
                                gamma_1, gamma_2, gamma_3,
                                feature_weight = rep(1,ncol(X)),
                                m = 5, phi=0.5,niter = 1000,tol = 0.1,output = 1){
 
-  require(cvxclustr)
-
+  requireNamespace("cvxclustr")
+  requireNamespace("reticulate")
   path <- paste("./R", "SBC_ADMM_WS.py", sep="/")
   source_python(path)
 

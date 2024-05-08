@@ -1,12 +1,9 @@
 # function to generate cluster label for biclustering problem using row and col names
 
 #' @title generate cluster label for bicluster
-#'
 #' @param X The data matrix to be clustered, containing rownames and colnames.
-#'
 #' @return bicluster labels
 #' @export
-#'
 #' @examples
 #'
 #' x <-matrix(c(1,2,3,4),2,2)

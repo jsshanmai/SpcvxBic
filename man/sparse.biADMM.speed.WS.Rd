@@ -65,6 +65,8 @@ Similar algorithm as \code{sparse.biADMM.speed}, add initial values for A,v,g,z 
 Note that A,v,g,z needs to be filled in at the same time.
 }
 \examples{
+\donttest{
+#Note that please get the py file in 'inst' fold.
 # generate dataset
 set.seed(123)
 X = data_gen(n = 100, p = 80 , true_p = 40)
@@ -73,14 +75,22 @@ nu1 = nu2 = nu3 = gamma_1 = gamma_2 = gamma_3 = 0.1
 m = 5
 phi = 0.5
 # Without fill A,v,g,z
-res1 = sparse.biADMM.speed.WS(X, A= NULL, nu1, nu2, nu3,v=NULL ,z=NULL ,g=NULL ,gamma_1, gamma_2, gamma_3,
-                             feature_weight = rep(1,ncol(X)), m , phi,niter = 2000,tol = 1e-6,output = 0)
+res1 = sparse.biADMM.speed.WS(X, A= NULL,
+nu1, nu2, nu3,v=NULL ,z=NULL ,g=NULL ,
+gamma_1, gamma_2, gamma_3,
+feature_weight = rep(1,ncol(X)),
+m , phi,niter = 2000,tol = 1e-6,output = 0)
 # change some parameters, use previous results as initial values
 gamma_1 = gamma_2 = 0.5
-res2 = sparse.biADMM.speed.WS(X, A= res1$A, nu1, nu2, nu3,v=res1$v ,z=res1$z ,g=res1$g ,gamma_1, gamma_2, gamma_3,
-                             feature_weight = rep(1,ncol(X)), m , phi,niter = 2000,tol = 1e-6,output = 0)
+res2 = sparse.biADMM.speed.WS(X,
+A= res1$A, nu1, nu2, nu3,v=res1$v ,
+z=res1$z ,g=res1$g ,
+gamma_1, gamma_2, gamma_3,
+feature_weight = rep(1,ncol(X)),
+m , phi,niter = 2000,tol = 1e-6,output = 0)
 #A rough comparison of computational efficiency
 print (res1$iters)
 print (res2$iters)
 dim(res2$A)
+}
 }

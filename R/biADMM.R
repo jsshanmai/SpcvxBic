@@ -29,9 +29,11 @@ path = "./R/biADMM.python_04.py"
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' #Note that please get the py file in 'inst' fold.
 #' # generate dataset
 #' set.seed(123)
-#' X = data_gen(n = 100, p = 80)
+#' X = data_gen(n = 100, p = 80, true_p=0)
 #' # set parameters
 #' nu1 = nu2 = gamma_1 = gamma_2 = 0.1
 #' m = 5
@@ -40,8 +42,8 @@ path = "./R/biADMM.python_04.py"
 #' res1 = biADMM(X, nu1, nu2, gamma_1, gamma_2,
 #'  m, phi, niter = 10, tol = 0.0001, output = 0)
 #' dim(res1$A)
-#'
-#'
+#'}
+
 
 
 biADMM = function(X, nu1, nu2,
@@ -49,11 +51,11 @@ biADMM = function(X, nu1, nu2,
                   prox = 'l2',
                   niters = 1000,tol = 0.1,output = 1){
 
-  require(reticulate)
-  require(cvxbiclustr)
-  require(cvxclustr)
-  require(Matrix)
-  require(MASS)
+  requireNamespace("reticulate")
+  #requireNamespace(cvxbiclustr)
+  requireNamespace("cvxclustr")
+  requireNamespace("Matrix")
+  requireNamespace("MASS")
 
   n <- dim(X)[1]; p <- dim(X)[2]
 
@@ -231,7 +233,7 @@ biADMM = function(X, nu1, nu2,
 #' @examples
 #' # generate dataset
 #' set.seed(123)
-#' X = data_gen(n = 100, p = 80)
+#' X = data_gen(n = 100, p = 80,true_p=0)
 #' # set parameters
 #' nu1 = nu2 = gamma_1 = gamma_2 = 0.1
 #' m = 5
@@ -245,11 +247,13 @@ biADMM = function(X, nu1, nu2,
 biADMM.speed = function(X, nu1,nu2, gamma_1, gamma_2, m,
                         phi,  prox = 'l2', niters = 10, tol = 0.1, output = 1){
 
-  require(reticulate)
-  require(cvxbiclustr)
-  require(cvxclustr)
-  require(Matrix)
-  require(MASS)
+  requireNamespace(reticulate)
+  #require(cvxbiclustr)
+  requireNamespace(cvxclustr)
+  requireNamespace(Matrix)
+  requireNamespace(MASS)
+  requireNamespace(reticulate)
+
 
   # path <- paste(system.file(package="biclusADMM"), "biADMM_python.py", sep="/")
   source_python(path)
@@ -386,6 +390,16 @@ prox_Linf_m = function(x, tau){
   px = x - proj_L1_m(x, tau)
   return(px)
 }
+
+
+#' Adjusts the sign of a vector according to specified conditions.
+#'
+#' @param px The condition for adjusting the sign.
+#' @param x The vector whose sign needs adjustment.
+#'
+#' @return a
+#'
+#' @export
 
 sign.c = function(px, x){
   a = ifelse(px == abs(x), x, ifelse(x > 0, abs(px), -abs(px)))

@@ -48,9 +48,11 @@ A list of results, containing matrix of A, v, z, lambda1, and lambda2
 bi-ADMM: a Biclustering Algorithm for the General Model
 }
 \examples{
+\donttest{
+#Note that please get the py file in 'inst' fold.
 # generate dataset
 set.seed(123)
-X = data_gen(n = 100, p = 80)
+X = data_gen(n = 100, p = 80, true_p=0)
 # set parameters
 nu1 = nu2 = gamma_1 = gamma_2 = 0.1
 m = 5
@@ -59,6 +61,5 @@ phi = 0.5
 res1 = biADMM(X, nu1, nu2, gamma_1, gamma_2,
  m, phi, niter = 10, tol = 0.0001, output = 0)
 dim(res1$A)
-
-
+}
 }

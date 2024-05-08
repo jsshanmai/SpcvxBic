@@ -1,4 +1,4 @@
-#' Cluster assignment: get the cluster labels after ADMM convex-biclustering algorithm
+#' Cluster_assignment: get the cluster labels after ADMM convex-biclustering algorithm
 #'
 #' The function: tri2vec, vec2tri, kernel_weights, knn_weights, get_subgroup_means_full, biclust_smooth,
 #' create_adjacency, find_clusters are from the cvxbiclustr package.
@@ -25,10 +25,11 @@ vec2tri <- function(k,n) {
 #' }, where the lth pair of nodes is (\code{i},\code{j}).
 #' @param X The data matrix to be clustered. The rows are the features, and the columns are the samples.
 #' @param phi The nonnegative parameter that controls the scale of kernel weights
-#' @useDynLib cvxbiclustr
 #' @return A vector \cite{w} of weights for convex clustering.
 #'
 kernel_weights <- function(X,phi=1) {
+  requireNamespace("biADMM")
+  requireNamespace("cvxclustr")
   storage.mode(X) <- "double"
   p <- as.integer(nrow(X))
   n <- as.integer(ncol(X))

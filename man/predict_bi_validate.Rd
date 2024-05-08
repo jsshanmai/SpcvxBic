@@ -9,7 +9,7 @@ predict_bi_validate(
   clusters_row,
   clusters_col,
   X_validate,
-  label_valdiate = Null,
+  label_valdiate = NULL,
   label.known = 1
 )
 }
