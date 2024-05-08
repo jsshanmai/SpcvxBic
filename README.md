@@ -10,22 +10,14 @@ Full code of simulation were provided with supplyment file of paper "sparse conv
 Here we show the example code of simulation, compared with biADMM algorithm
 
 #05/08/2024 at Beijing Normal University Zhuhai Campus
+
 pac <- c("survival","plyr","ggplot2","reshape2","phyloseq",'dirmult',"microbiome","vegan","e1071","caret","pROC",
          "fossil","cvxclustr","cvxbiclustr","doParallel","foreach","mclust","Matrix","MASS","reticulate")
+         
 .tmp <- lapply(pac, library, character.only = T)
+
 setwd('C:/Users/matebook 14/Desktop/~/Re_ sparse convex biclustering')
 
-source("./R/data_gen.R")
-source("./R/sylvester.R")
-source("./R/SCB_ADMM.R")
-source("./R/SCB_ADMM_speed.R")
-source("./R/util.R")
-source("./R/cluster assignment.R")
-source('./R/prediction_validation_biclustering.R')
-source('./R/bicluster.label.R')
-source('./R/feature_selection_diagnostic.R')
-source('./R/biADMM.R')
-source("./R/SCB_ADMM_speed_WS.R")
 #evaluate ARI of algo with mean and sd
 MSD <- function(x) {
   if (is.list(x)) {
@@ -59,21 +51,34 @@ feature.selection.diagnostic.quatile<-function(X, A,p,true_p,method =sd,tol = 1e
 
 
 nu1 = nu2 = nu3 = 1e+4 # 500
+
 m = 5
+
 phi = 1
+
 tol = 5e-6
 
 #data generation set-up
 
 n = 240
+
 p = 400 # 200
+
 true_p = 60 #10 is good may 15
+
 theta = 1 # 1 is good
+
 theta_noise = 3# 1 is good,2^(1/2) is great
+
 row_group = 4 #行聚成几类
+
 col_group = 4 #列聚成几类，col对应特征
+
 mu.lower = -5#-3
+
 mu.upper = 5#3
+
+
 
 #repetition
 rep.num = 10
@@ -82,19 +87,25 @@ rep.num = 10
 X = data_gen(seed.cluster = 123, seed.data = 654, n=n, true_p=true_p, p=p,
              mu.lower=mu.lower, mu.upper=mu.upper,
              theta = theta, theta_noise=theta_noise, row_group = row_group, col_group = col_group)
+
 dim(X)
-#mu <-seq(-5,5,0.2);sample(mu, size = row_group*col_group, replace = T)
 
 #heatmap example
 plot.X = X
 plot.X = X[,1:true_p] # true_p is the first p feature and noise otherwise
 
 col_types = colnames(plot.X)
+
 col_ty = as.numeric(factor(col_types))
+
 row_types = rownames(plot.X)
+
 row_ty = as.numeric(factor(row_types))
+
 cols <- rainbow(4)
+
 YlGnBu5 <- c('#ffffd9','#c7e9b4','#41b6c4','#225ea8','#081d58')
+
 hmcols <- colorRampPalette(YlGnBu5)(256)
 
 heatmap(plot.X,col=hmcols,labRow=NA,labCol=NA,
@@ -104,78 +115,134 @@ heatmap(plot.X,col=hmcols,labRow=NA,labCol=NA,
 
 #Initialize path parameters and structures
 nGamma_1_2 <- 12
+
 gammaSeq_1_2 <- exp(seq(1,7,length.out=nGamma_1_2)) #1,7
+
 gammaSeq_1_2 <-gammaSeq_1_2[c(-1,-2,-3,-4)]
+
 nGamma_1_2 <- length(gammaSeq_1_2)
+
+
 
 nGamma_3 <- 12
 gammaSeq_3 <- exp(seq(2,6,length.out=nGamma_3))#6
+
 gammaSeq_3 <-gammaSeq_3[c(-1,-2,-3,-4)]
+
 nGamma_3 <- length(gammaSeq_3)
+
 gamma_12_3.grid <-expand.grid(gammaSeq_1_2,gammaSeq_3) # obtain a grid with gamma12_3
 
+
+
 #get the right order to warm start, note that the previous results are great Warm Start
+
 #if find the results (A,v,g,z) with very close parameters, iters will reduce significantly
+
 gamma_12_3.grid <- gamma_12_3.grid[order(-gamma_12_3.grid$Var1, -gamma_12_3.grid$Var2), ]
+
 gamma_12_3.grid$index <-seq_len(nrow(gamma_12_3.grid))
+
 gamma_12_3.grid$ws_index <- seq_len(nrow(gamma_12_3.grid))-1
 
+
+
 #get the gamma_3 max index and change ws_order
+
 max3_index <-which(gamma_12_3.grid$index %% nGamma_3 == 0)+1
+
 max3_index <-max3_index[-length(max3_index)] # delete last one
+
 gamma_12_3.grid$ws_index[max3_index] <-gamma_12_3.grid$index[max3_index]-nGamma_3
+
 gamma_12_3.grid
+
 #with new gamma solution
 
+
+
 #initialize vectors
+
 best.bi.admm.adj.rand = numeric()
+
 best.bi.admm.gamma.index = numeric()
+
 best.val.bi.admm.adj.rand = numeric()
+
 best.val.bi.admm.gamma.index = numeric()
+
 best.bi.iters = numeric()
 
+
+
 best.scb.admm.adj.rand = numeric()
+
 best.scb.admm.gamma.index = numeric() #
+
 best.val.scb.admm.adj.rand = numeric()
+
 best.val.scb.admm.gamma.index = numeric()
+
 best.scb.iters = numeric()
+
+
 
 times <- numeric()
 
+
+
 norm.X.f.vector <- numeric()
 
+
+
 #initialize output lists
+
 bi.admm.result.list = list()
+
 scb.admm.result.list = list()
+
 for (i in 1:rep.num) bi.admm.result.list[[i]]<-list()
+
 for (i in 1:rep.num) scb.admm.result.list[[i]] <- list()
+
 for (i in 1:rep.num) {
+
   for ( ii in 1:nrow(gamma_12_3.grid)) scb.admm.result.list[[i]][[ii]] <- list()
 }
 
 bi.admm.adj.rand.list = list()
+
 bi.admm.validate.adj.rand.list = list()
 
+
 best.bi.admm.gamma.list = list()
+
 best.bi.admm.validate.gamma.list = list()
 
+
 best.bi.A.list = list()
+
 best.bi.admm.X.groups.list = list()
 
+
 scb.admm.adj.rand.list = list()
+
 scb.admm.validate.adj.rand.list = list()
 
+
 best.scb.admm.gamma.list = list()
+
 best.scb.admm.validate.gamma.list = list()
 
 best.scb.A.list = list()
+
 best.scb.admm.X.groups.list = list()
 
 best.scb.fs.diagnostic.list = list()
 
 #start simulations
-
 for (ii in 1:rep.num){ # 重复50 次
+
 
   cat('\n',ii,'time repeat start')
   t0 <- Sys.time()
