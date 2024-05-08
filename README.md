@@ -218,7 +218,8 @@ best.scb.admm.X.groups.list = list()
 best.scb.fs.diagnostic.list = list()
 
 #start simulations
-```Sparse Convex Biclustering
+
+```ruby
 
 for (ii in 1:rep.num){ # 重复50 次
   cat('\n',ii,'time repeat start')
@@ -376,6 +377,7 @@ for (ii in 1:rep.num){ # 重复50 次
   #scb.admm.result.list[[ii]][[para.index]]$g <-NULL
   #}
 }
+
 ```
 table(best.scb.admm.gamma.index)
 MSD(best.bi.admm.adj.rand)
