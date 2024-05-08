@@ -9,7 +9,7 @@ main function is "SCB_ADMM_speed.R". Please use the corresponding Python file an
 Full code of simulation were provided with supplyment file of paper "sparse convex bicluster".
 Here we show the example code of simulation, compared with biADMM algorithm
 
-#05/08/2024 at Beijing Normal University Zhuhai Campus
+#05/08/2024 谷晨亮 (Chenliang Gu) at Beijing Normal University Zhuhai Campus
 
 ```
 pac <- c("survival","plyr","ggplot2","reshape2","phyloseq",'dirmult',"microbiome","vegan","e1071","caret","pROC",
@@ -50,7 +50,6 @@ feature.selection.diagnostic.quatile<-function(X, A,p,true_p,method =sd,tol = 1e
 }
 #feature.selection.diagnostic.quatile (X=scale.X,A=best.bi.A.list[[ii]]* norm.X.f.vector[ii],p=p,true_p = true_p,method =mean)
 
-
 nu1 = nu2 = nu3 = 1e+4 # 500
 
 m = 5
@@ -78,8 +77,6 @@ col_group = 4 #列聚成几类，col对应特征
 mu.lower = -5#-3
 
 mu.upper = 5#3
-
-
 
 #repetition
 rep.num = 10
@@ -113,7 +110,6 @@ heatmap(plot.X,col=hmcols,labRow=NA,labCol=NA,
         ColSideCol=cols[col_ty],RowSideCol=cols[row_ty],
         main = 'Example')
 
-
 #Initialize path parameters and structures
 nGamma_1_2 <- 12
 
@@ -122,8 +118,6 @@ gammaSeq_1_2 <- exp(seq(1,7,length.out=nGamma_1_2)) #1,7
 gammaSeq_1_2 <-gammaSeq_1_2[c(-1,-2,-3,-4)]
 
 nGamma_1_2 <- length(gammaSeq_1_2)
-
-
 
 nGamma_3 <- 12
 gammaSeq_3 <- exp(seq(2,6,length.out=nGamma_3))#6
@@ -134,8 +128,6 @@ nGamma_3 <- length(gammaSeq_3)
 
 gamma_12_3.grid <-expand.grid(gammaSeq_1_2,gammaSeq_3) # obtain a grid with gamma12_3
 
-
-
 #get the right order to warm start, note that the previous results are great Warm Start
 
 #if find the results (A,v,g,z) with very close parameters, iters will reduce significantly
@@ -145,8 +137,6 @@ gamma_12_3.grid <- gamma_12_3.grid[order(-gamma_12_3.grid$Var1, -gamma_12_3.grid
 gamma_12_3.grid$index <-seq_len(nrow(gamma_12_3.grid))
 
 gamma_12_3.grid$ws_index <- seq_len(nrow(gamma_12_3.grid))-1
-
-
 
 #get the gamma_3 max index and change ws_order
 
@@ -160,8 +150,6 @@ gamma_12_3.grid
 
 #with new gamma solution
 
-
-
 #initialize vectors
 
 best.bi.admm.adj.rand = numeric()
@@ -174,8 +162,6 @@ best.val.bi.admm.gamma.index = numeric()
 
 best.bi.iters = numeric()
 
-
-
 best.scb.admm.adj.rand = numeric()
 
 best.scb.admm.gamma.index = numeric() #
@@ -186,15 +172,9 @@ best.val.scb.admm.gamma.index = numeric()
 
 best.scb.iters = numeric()
 
-
-
 times <- numeric()
 
-
-
 norm.X.f.vector <- numeric()
-
-
 
 #initialize output lists
 
@@ -215,21 +195,17 @@ bi.admm.adj.rand.list = list()
 
 bi.admm.validate.adj.rand.list = list()
 
-
 best.bi.admm.gamma.list = list()
 
 best.bi.admm.validate.gamma.list = list()
-
 
 best.bi.A.list = list()
 
 best.bi.admm.X.groups.list = list()
 
-
 scb.admm.adj.rand.list = list()
 
 scb.admm.validate.adj.rand.list = list()
-
 
 best.scb.admm.gamma.list = list()
 
@@ -242,9 +218,9 @@ best.scb.admm.X.groups.list = list()
 best.scb.fs.diagnostic.list = list()
 
 #start simulations
+```Sparse Convex Biclustering
+
 for (ii in 1:rep.num){ # 重复50 次
-
-
   cat('\n',ii,'time repeat start')
   t0 <- Sys.time()
   X = data_gen(seed.cluster = 123*ii, seed.data = 654*ii, n=n, true_p=true_p, p=p,
@@ -400,7 +376,7 @@ for (ii in 1:rep.num){ # 重复50 次
   #scb.admm.result.list[[ii]][[para.index]]$g <-NULL
   #}
 }
-
+```
 table(best.scb.admm.gamma.index)
 MSD(best.bi.admm.adj.rand)
 MSD(best.scb.admm.adj.rand)
