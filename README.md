@@ -216,8 +216,8 @@ best.scb.A.list = list()
 best.scb.admm.X.groups.list = list()
 
 best.scb.fs.diagnostic.list = list()
-
-#start simulations
+```
+# start simulations
 
 ```ruby
 
@@ -385,4 +385,3 @@ MSD(best.scb.admm.adj.rand)
 
 MSD(best.val.bi.admm.adj.rand)
 MSD(best.val.scb.admm.adj.rand)
-```
